@@ -1,0 +1,1 @@
+Esta pasta é destinada à guarda temporária de arquivos utilizados pelo worker. Ela já está apontada nas funções como pasta padrão. Para facilitar, deixe o padrão. Porém, caso queira indicar outra pasta, não utilize pastas fora da pasta do worker para evitar erros na publicação.

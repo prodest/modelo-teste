@@ -1,0 +1,7 @@
+# Dataset: "Cyberbullying Classification"
+Obtido através do endereço (acessado em 02/09/2023): https://www.kaggle.com/datasets/andrewmvd/cyberbullying-classification?resource=download
+Obs 1.: Foi feito um ajuste para corrigir o import pelo Pandas por conta de 'quoting'.
+Obs 2.: Alguns exemplos tiveram os labels alterados de "not_cyberbullying" para "new_label", para executar o teste de retreino.
+
+# Citação (https://ieeexplore.ieee.org/document/9378065):
+J. Wang, K. Fu, C.T. Lu, "SOSNet: A Graph Convolutional Network Approach to Fine-Grained Cyberbullying Detection," Proceedings of the 2020 IEEE International Conference on Big Data (IEEE BigData 2020), December 10-13, 2020.
