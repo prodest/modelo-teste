@@ -23,6 +23,6 @@ Considerando que este modelo servirá apenas para realização de testes, **NÃO
 - Otimizações do código;
 - etc.
 
-Enfim, o desenvolvimento deste modelo de teste teve como objetivo principal ilustrar a implementação de um modelo 
+Enfim, o desenvolvimento deste modelo teve como objetivo principal ilustrar a implementação de um modelo 
 utilizando a [Biblioteca de Machine Learning (ML) do Prodest](https://github.com/prodest/mllibprodest), que servisse como
-base para a [Stack de ML do Prodest](https://github.com/prodest/prodest-ml-stack).
+base para *deploys* de teste da [Stack de ML do Prodest](https://github.com/prodest/prodest-ml-stack) (versão standalone).
