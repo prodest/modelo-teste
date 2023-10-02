@@ -42,7 +42,7 @@ class ModeloCLF(ModelPublicationInterfaceCLF):
     def get_model_provider_name(self) -> str:
         return self.__model_provider_name
 
-    def get_model_info(self) -> dict:
+    def get_model_info(self) -> dict | str:
         if type(self.__info_modelo) is dict:
             return self.__info_modelo
         else:
