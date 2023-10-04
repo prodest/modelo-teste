@@ -22,4 +22,6 @@ def test(modelos: dict):
         print("Evaluate:", modelo.evaluate(["Today’s society so sensitive it’s sad they joke about everything but they take out the gay jokes before race, rape, and other 'sensitive' jokes",
                                             "aposto que vou sofrer bullying depois do meu próximo tweet"],
                                            ['gender', 'not_cyberbullying']))
+        print("Get Feedback:", modelo.get_feedback(["not_cyberbullying", "ethnicity", "religion", "ethnicity", "religion", "religion", "age", "age"],
+                                                   ["not_cyberbullying", "age", "ethnicity", "ethnicity", "religion", "new_label_1", "new_label_1", "new_label_2"]))
         print("Get Info:", modelo.get_model_info())
