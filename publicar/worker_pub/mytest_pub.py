@@ -11,7 +11,7 @@ def test(modelos: dict):
     REGRAS:
     1. Não altere o nome do script 'mytest_pub.py' nem o nome da função 'test()';
     2. Não altere os nomes nem os tipos de parâmetros recebidos pela função 'test()';
-    3. Esta função não deve retornar nada;
+    3. Esta função não deve ter retorno;
     4. A responsabilidade de criar os testes personalizados e verificar se passaram é do desenvolvedor do modelo;
     5. Imprima na tela ou salve em logs as informações que você achar que são úteis.
     """
