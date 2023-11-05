@@ -7,7 +7,7 @@
 #          testes e validar se o modelo, de fato, tem condições de evoluir para uma nova versão.
 # ----------------------------------------------------------------------------------------------------
 import os
-import logging
+from logging import getLogger, FATAL
 import mlflow
 import numpy as np
 import pandas as pd
@@ -21,7 +21,7 @@ from .utils import concatenar_registros, predizer_tfidf, construir_modelo_rn, ge
 
 """ Desativa as mensagens de warning e info do TensorFlow """
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-logging.getLogger('tensorflow').setLevel(logging.FATAL)
+getLogger('tensorflow').setLevel(FATAL)
 
 """ Desativa o uso de GPU """
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
@@ -32,7 +32,7 @@ class ModeloRETRAIN(ModelPublicationInterfaceRETRAIN):
         self.__logger_name = model_name + "_retrain.log"
         self.__logger = self.make_log(self.__logger_name)
 
-        # Definição dos atributos necessários para a implementação dos método get
+        # Definição dos atributos necessários para a implementação dos métodos get
         self.__model_name = model_name
         self.__model_provider_name = model_provider_name
         self.__experiment_name = experiment_name

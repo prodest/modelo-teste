@@ -1,12 +1,11 @@
 # ----------------------------------------------------------------------------------------------------------
 # Script para treinamento do modelo
 # ----------------------------------------------------------------------------------------------------------
-import logging
 import os
 import configs as cf
 from datetime import datetime
 from time import time, sleep
-from utils import obter_parametros_modelo
+from utils import LOGGER, obter_parametros_modelo
 
 
 def treinar(c):
@@ -14,7 +13,7 @@ def treinar(c):
     Rotina de treinamento do modelo.
         :param c: Arquivo de configuração importado.
     """
-    # Gera um id de execução para rastreamanento do modelo gerado no arquivo de log
+    # Gera um id de execução para rastreamento do modelo gerado no arquivo de log
     id_exec = datetime.fromtimestamp(int(time())).strftime('%Y-%m-%d_%H%M%Shs')
     msg = f"# ID da execução: {id_exec}"
     print(f"{msg}\n")
@@ -22,20 +21,19 @@ def treinar(c):
     print(f"=> Importando bibliotecas...", end='', flush=True)
 
     from sklearn.model_selection import train_test_split
-    from utils import salvar_modelo
+    from utils import LOGGER, salvar_modelo, carregar_dataset, concatenar_registros, imprimir_shapes, \
+        imprimir_alguns_parametros_utilizados, imprimir_parametros_treino_rn_tfidf
     from rede_neural_tfidf import clf_rn_tfidf
-    from utils import carregar_dataset, concatenar_registros
-    from utils import imprimir_shapes, imprimir_alguns_parametros_utilizados, imprimir_parametros_treino_rn_tfidf
     from keras.preprocessing.text import Tokenizer
     from sklearn import preprocessing
     import mlflow.tensorflow
 
     print(" OK!")
 
-    logging.info("---------------- APLICAÇÃO INICIADA (Treinamento) ----------------")
-    logging.info(msg)
+    LOGGER.info("---------------- APLICAÇÃO INICIADA (Treinamento) ----------------")
+    LOGGER.info(msg)
 
-    info_modelo = ""  # Guardará algumas informações da rotina de treinamento para salvar junto com o modelo
+    info_modelo = ""  # Guardará algumas informações da rotina de treinamento para salvar com o modelo
     ts_inicio_treinamento = time()
 
     # Monta o caminho completo do arquivo
@@ -50,18 +48,13 @@ def treinar(c):
                             c.qtd_exemplos)
 
     # Divide os dados para o treinamento, validação e teste
-    x_train = None
-    x_test = None
-    y_train = None
-    y_test = None
-
     try:
         x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=c.percentual_exemplos_teste, shuffle=True,
                                                             random_state=c.trava_randomica)
     except ValueError as e:
         msg = f"O parâmetro 'percentual_exemplos_teste' está inconsistente. Mensagem do 'train_test_split': '{e}'. " \
               f"Programa abortado!"
-        logging.error(msg)
+        LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({c.arquivo_log}) para mais detalhes!\n")
         exit(1)
 
@@ -73,7 +66,7 @@ def treinar(c):
     info_modelo += imprimir_shapes("Dimensões dos datasets depois do split", x_train, y_train, x_val, y_val,
                                    x_test, y_test)
     msg = f"Exemplo do dataset carregado (10 primeiros registros):\n\n{x_train[:10]}\n"
-    logging.info(msg)
+    LOGGER.info(msg)
     info_modelo += "\n" + msg
     print(msg)
 
@@ -90,7 +83,7 @@ def treinar(c):
 
     msg = f"Exemplo do dataset limpo (caracteres especiais) e concatenado (10 primeiros registros " \
           f"remover_stop_words = {c.remover_stop_words}):\n\n{x_train[:10]}\n"
-    logging.info(msg)
+    LOGGER.info(msg)
     info_modelo += "\n" + msg
     print(f"\n{msg}")
 
@@ -145,7 +138,7 @@ def treinar(c):
     # Treina o modelo
     modelo, hist, resultado_teste = clf_rn_tfidf(t, le, x_train, y_train, x_test, y_test, x_val, y_val)
     msg = f"Histórico do treinamento: {hist.history}"
-    logging.info(msg)
+    LOGGER.info(msg)
     info_modelo += "\n" + msg
 
     del y, x_train, y_train, x_test, y_test, x_val, y_val
@@ -160,7 +153,7 @@ def treinar(c):
     segundos = int(tempo_duracao)
 
     msg = f"=> Duração do treinamento: {horas} hora(s), {minutos} minuto(s) e {segundos} segundo(s)"
-    logging.info(msg)
+    LOGGER.info(msg)
     print(msg)
 
     salvar_modelo(t, le, modelo, hist, resultado_teste, tipo_modelo, nome_modelo, c.caminho_modelos_salvos, id_exec,
@@ -189,18 +182,6 @@ def treinar(c):
 
 
 if __name__ == "__main__":
-    # Configuração de parâmetros para geração de logs
-    try:
-        logging.basicConfig(filename=cf.arquivo_log, format='%(asctime)s - %(levelname)s | %(funcName)s: %(message)s',
-                            level=logging.INFO)
-    except FileNotFoundError:
-        print(f"\n\nNão foi possível encontrar o arquivo de log no caminho '{cf.arquivo_log}'. Programa abortado!\n")
-        exit(1)
-    except PermissionError:
-        print(f"\n\nNão foi possível criar/acessar o arquivo de log no caminho '{cf.arquivo_log}'. Permissão de "
-              f"escrita/leitura negada. Programa abortado!\n")
-        exit(1)
-
     print("\n\n\033[1m\033[92m")
     print("                    ======================================================================================")
     print("                    |               C L A S S I F I C A D O R   C Y B E R B U L L Y I N G                |")
@@ -226,5 +207,5 @@ if __name__ == "__main__":
     treinar(cf)
 
     print("\n\033[1m\033[92m=> Rotina de treinamento finalizada com sucesso!\033[0m\n")
-    logging.info("---------------- APLICAÇÃO FINALIZADA ----------------")
+    LOGGER.info("---------------- APLICAÇÃO FINALIZADA ----------------")
     exit(0)

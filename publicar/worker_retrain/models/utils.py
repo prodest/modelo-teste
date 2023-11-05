@@ -23,14 +23,14 @@ def concatenar_registros(x, algumas_stop_words, remover_stop_words=False):
     registros_tratados = []
 
     for i in range(len(x)):
-        # Retira espaços em branco no final e no inicio do campo. Também retira acentuação e caracteres especiais
+        # Retira espaços em branco no final e no início do campo. Também retira acentuação e caracteres especiais
         aux = ' '.join([normalize('NFKD', re.sub(r'[^\w\s]', ' ', t.strip())).encode('ASCII', 'ignore').decode('ASCII')
                         for t in list(x[i])])
 
         # Se for o caso, remove as stopwords
         if remover_stop_words:
             # Faz join e depois split novamente porque no join anterior são juntadas palavras e frases,
-            # aqui é pra separar só em palavras
+            # aqui é para separar só em palavras
             split_aux = aux.split()
             aux = [w for w in split_aux if w.lower() not in algumas_stop_words]
             aux = ' '.join(aux)
@@ -56,10 +56,6 @@ def tratar_texto_tfidf(t, le, x_train, y_train, x_test, y_test, x_val, y_val, lo
     """
     # Obs.: Está considerando o y completo
     qtd_classes_y = len(le.classes_)
-
-    cod_x_train = None
-    cod_x_test = None
-    cod_x_val = None
 
     # Codifica o texto com base no TF-IDF (Term Frequency - Inverse Document Frequency) que leva em conta a relevância
     # da palavra no texto
@@ -119,7 +115,7 @@ def construir_modelo_rn(input_shape, output_dim, neuronios=2, aplicar_dropout=Fa
         :param neuronios: Quantidade de neurônios que serão utilizados na rede neural.
         :param aplicar_dropout: Indica se será aplicado Dropout.
         :param perc_dropout: Se for aplicar dropout, qual o percentual.
-        :return: modelo baseado em rede neural instanciado com os parâmetros passados.
+        :return: Modelo baseado em rede neural instanciado com os parâmetros passados.
     """
     modelo = tf.keras.models.Sequential()
     modelo.add(tf.keras.layers.Dense(units=neuronios, input_shape=input_shape, activation='relu'))

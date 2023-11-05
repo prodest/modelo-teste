@@ -96,7 +96,7 @@ nome_experimento = 'CLF-Cyberbullying_Tweets'
 
 """ Parâmetros para configuração do modelo 'clf_rn_tfidf' """
 
-# Altere para True caso o modelo esteja dando overfitting, ou seja, a acurácia esteja boa no teinamento mas ruim no
+# Altere para True caso o modelo esteja dando overfitting, ou seja, a acurácia esteja boa no treinamento, mas ruim no
 # teste
 aplicar_dropout = False
 
@@ -133,10 +133,10 @@ tamanho_lote = 50000
 """ Desativa as mensagens de warning e info do TensorFlow """
 if True:  # If somente para tirar o aviso de importação fora do topo do arquivo
     import os
-    import logging
+    from logging import getLogger, FATAL
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-logging.getLogger('tensorflow').setLevel(logging.FATAL)
+getLogger('tensorflow').setLevel(FATAL)
 
 """ Desativa o uso de GPU """
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
