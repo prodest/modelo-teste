@@ -48,11 +48,6 @@ def treinar(c):
                             c.qtd_exemplos)
 
     # Divide os dados para o treinamento, validação e teste
-    x_train = None
-    x_test = None
-    y_train = None
-    y_test = None
-
     try:
         x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=c.percentual_exemplos_teste, shuffle=True,
                                                             random_state=c.trava_randomica)

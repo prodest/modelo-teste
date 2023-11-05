@@ -191,7 +191,6 @@ def salvar_objeto(caminho, objeto, nome_objeto):
         :param objeto: Objeto que será salvo.
         :param nome_objeto: Nome do objeto que será salvo.
     """
-    arq = None
     caminho_arq_objeto = f"{caminho}{nome_objeto}.pkl"
 
     try:
@@ -237,7 +236,6 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
         :return: Datasets carregados e tamanho do dataset.
     """
     print(f"=> Carregando dataset ('{caminho_arquivo}')...", end='', flush=True)
-    dados = None
 
     try:
         dados = pd.read_csv(caminho_arquivo, dtype=str, sep=separador, encoding=encoding_arquivo)
@@ -296,8 +294,6 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
         dados = dados.sample(frac=1, random_state=0)  # Mistura os exemplos para tentar pegar todas as classes
         dados = dados[:qtd_exemplos]
 
-    x = None
-
     # Separa em features e targets
     try:
         x = dados[colunas_selecionadas_x]
@@ -306,8 +302,6 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
         LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
-
-    y = None
 
     # Extrai a coluna com os targets
     try:
@@ -407,10 +401,6 @@ def tratar_texto_tfidf(t, le, x_train, y_train, x_test, y_test, x_val, y_val):
 
     LOGGER.info(msg_log)
     print(msg_log)
-
-    cod_x_train = None
-    cod_x_test = None
-    cod_x_val = None
 
     # Codifica o texto com base no TF-IDF (Term Frequency - Inverse Document Frequency) que leva em conta a relevância
     # da palavra no texto
@@ -558,9 +548,6 @@ def obter_parametros_modelo(cf):
         :param cf: Arquivo de configuração importado.
         :return: Tipo e nome do modelo.
     """
-    tipo_modelo = ""
-    nome_modelo = ""
-
     if 'Tipo modelo' in cf.dados_modelo and 'Nome modelo' in cf.dados_modelo:
         tipo_modelo = cf.dados_modelo['Tipo modelo']
         nome_modelo = cf.dados_modelo['Nome modelo']

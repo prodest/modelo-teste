@@ -57,10 +57,6 @@ def tratar_texto_tfidf(t, le, x_train, y_train, x_test, y_test, x_val, y_val, lo
     # Obs.: Está considerando o y completo
     qtd_classes_y = len(le.classes_)
 
-    cod_x_train = None
-    cod_x_test = None
-    cod_x_val = None
-
     # Codifica o texto com base no TF-IDF (Term Frequency - Inverse Document Frequency) que leva em conta a relevância
     # da palavra no texto
     try:
