@@ -9,8 +9,70 @@ import pandas as pd
 import numpy as np
 from unicodedata import normalize
 from keras.utils import to_categorical
-from os import makedirs
 from configs import arquivo_log
+from os import makedirs
+from logging.handlers import RotatingFileHandler
+from pathlib import Path
+
+
+def make_log(filename: str, log_output: str = "file") -> logging.Logger:
+    """
+    Cria um logger para gerar logs na console ou gravar em um arquivo. Se o arquivo já existir, inicia a gravação a
+    partir do final dele.
+        :param filename: Nome do arquivo de logs (caso o log seja gravado em arquivo).
+        :param log_output: Destino para geração dos logs.
+        :return: Um logger para geração dos logs.
+    """
+    # Configurações básicas
+    logger_name = filename.split(".")[0]
+    logging.basicConfig(level=logging.CRITICAL)
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s | %(funcName)s: %(message)s')
+    logger.propagate = False
+
+    if log_output == "console":
+        consolehandler = logging.StreamHandler()
+        consolehandler.setLevel(logging.INFO)
+        consolehandler.setFormatter(formatter)
+        logger.addHandler(consolehandler)
+    elif log_output == "file":
+        # Se a pasta de logs não existir, cria
+        try:
+            makedirs("logs", exist_ok=True)
+        except PermissionError:
+            msg = "Erro ao criar a pasta 'logs'. Permissão de escrita negada!"
+            print(f"\n{msg}\n")
+            exit(1)
+
+        log_file_path = str(Path("logs") / filename)
+
+        # Configuração de parâmetros para gravação de logs
+        try:
+            rotatehandler = RotatingFileHandler(log_file_path, mode='a', maxBytes=10485760, backupCount=5)
+            rotatehandler.setLevel(logging.INFO)
+            rotatehandler.setFormatter(formatter)
+            logger.addHandler(rotatehandler)
+        except FileNotFoundError:
+            msg = f"Não foi possível encontrar/criar o arquivo de log no caminho '{log_file_path}'. Programa abortado!"
+            print(f"\n{msg}\n")
+            exit(1)
+        except PermissionError:
+            msg = f"Não foi possível criar/acessar o arquivo de log no caminho '{log_file_path}'. Permissão de " \
+                  f"escrita/leitura negada. Programa abortado!"
+            print(f"\n{msg}\n")
+            exit(1)
+    else:
+        msg = f"O parâmetro 'log_output' contém um tipo de saída do log incorreto ('{log_output}'). Os possíveis " \
+              f"valores são: 'console' ou 'file'."
+        print(f"\n{msg}\n")
+        exit(1)
+
+    return logger
+
+
+# Para facilitar, define um logger único para todas as funções
+LOGGER = make_log(filename="train.log", log_output="file")
 
 
 def imprimir_parametros_treino_rn_tfidf(param):
@@ -30,7 +92,7 @@ def imprimir_parametros_treino_rn_tfidf(param):
         trava_ramdomica = {param.trava_randomica}
     """
 
-    logging.info(parametros)
+    LOGGER.info(parametros)
     return parametros
 
 
@@ -62,7 +124,7 @@ def imprimir_alguns_parametros_utilizados(param):
         dados_modelo = {param.dados_modelo}
     """
 
-    logging.info(parametros)
+    LOGGER.info(parametros)
     return parametros
 
 
@@ -88,7 +150,7 @@ def imprimir_shapes(msg_titulo, x_train, y_train, x_val, y_val, x_test, y_test):
     msg += f"\n    y Teste......: {y_test.shape}\n"
     msg += f"\n    - Total de exemplos: {len(x_train) + len(x_val) + len(x_test)}\n"
 
-    logging.info(msg)
+    LOGGER.info(msg)
     print(msg)
     return msg
 
@@ -118,7 +180,7 @@ def gerar_grafico_historico_treino(hist, caminho_modelo):
     axis[1].legend(['Treino', 'Validação'], loc='upper left')
 
     caminho_arq_grafico = caminho_modelo + "grafico_treinamento.jpeg"
-    logging.info(f">>> Um gráfico com o histórico do treinamento foi gerado no arquivo '{caminho_arq_grafico}'")
+    LOGGER.info(f">>> Um gráfico com o histórico do treinamento foi gerado no arquivo '{caminho_arq_grafico}'")
     plt.savefig(caminho_arq_grafico)
 
 
@@ -137,13 +199,13 @@ def salvar_objeto(caminho, objeto, nome_objeto):
     except FileNotFoundError:
         msg = f"Erro ao salvar o objeto '{nome_objeto}'. O caminho '{caminho_arq_objeto}' está incorreto. Programa " \
               f"abortado!"
-        logging.error(msg)
+        LOGGER.error(msg)
         print(f"\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
     except PermissionError:
         msg = f"Erro ao salvar o objeto '{nome_objeto}' no caminho '{caminho}'. Permissão de escrita negada. " \
               f"Programa abortado!"
-        logging.error(msg)
+        LOGGER.error(msg)
         print(f"\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
 
@@ -152,12 +214,12 @@ def salvar_objeto(caminho, objeto, nome_objeto):
     except TypeError as e:
         msg = f"Erro ao persistir o objeto '{nome_objeto}' com o Pickle (mensagem Pickle: {e}). " \
               f"Programa abortado!"
-        logging.error(msg)
+        LOGGER.error(msg)
         print(f"\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
 
     arq.close()
-    logging.info(f"O objeto '{nome_objeto}' foi salvo no arquivo '{caminho_arq_objeto}'")
+    LOGGER.info(f"O objeto '{nome_objeto}' foi salvo no arquivo '{caminho_arq_objeto}'")
 
 
 def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selecionadas_dataset,
@@ -181,7 +243,7 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
         dados = pd.read_csv(caminho_arquivo, dtype=str, sep=separador, encoding=encoding_arquivo)
     except FileNotFoundError:
         msg = f"O arquivo '{caminho_arquivo}' não foi encontrado. Programa abortado!"
-        logging.error(msg)
+        LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
 
@@ -195,14 +257,14 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
     except KeyError as e:
         msg = f"Coluna em 'colunas_selecionadas_dataset' não encontrada no dataset (erro Pandas: {e}). " \
               f"Programa abortado!"
-        logging.error(msg)
+        LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
 
     print(f"=> Verificando se existem valores vazios (descartar_registros_vazios = {descartar_registros_vazios})...",
           end='', flush=True)
 
-    logging.info(f"Opção: descartar_registros_vazios = {descartar_registros_vazios}")
+    LOGGER.info(f"Opção: descartar_registros_vazios = {descartar_registros_vazios}")
 
     # Verifica se tem valores vazios e trata
     msg = f"\n\n  # Quantidade de valores vazios por coluna:\n{dados.isna().sum()}"
@@ -227,7 +289,7 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
 
     print(" OK!")
 
-    logging.info(msg)
+    LOGGER.info(msg)
 
     #  Limita a quantidade de exemplos para não estourar a memória do computador!
     if tamanho_dataset > qtd_exemplos:
@@ -241,7 +303,7 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
         x = dados[colunas_selecionadas_x]
     except KeyError as e:
         msg = f"Coluna em 'colunas_selecionadas_x' não encontrada no dataset (erro Pandas: {e}). Programa abortado!"
-        logging.error(msg)
+        LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
 
@@ -253,7 +315,7 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
     except KeyError as e:
         msg = f"Coluna em 'colunas_selecionadas_y' não encontrada no dataset (erro Pandas: {e}). " \
               f"Programa abortado!"
-        logging.error(msg)
+        LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
 
@@ -343,7 +405,7 @@ def tratar_texto_tfidf(t, le, x_train, y_train, x_test, y_test, x_val, y_val):
                f"frequentes): \n{palavras[:20]}"
     msg_log += f"\n\n==> Indice das palavras do treino (primeiras 20 palavras): \n{list(t.word_index.items())[:20]}\n"
 
-    logging.info(msg_log)
+    LOGGER.info(msg_log)
     print(msg_log)
 
     cod_x_train = None
@@ -358,7 +420,7 @@ def tratar_texto_tfidf(t, le, x_train, y_train, x_test, y_test, x_val, y_val):
         cod_x_val = t.texts_to_matrix(x_val, mode='tfidf')
     except MemoryError as e:
         msg = f"Erro na alocação de memória. Mensagem do Tokenizer: '{e}'. Programa abortado!"
-        logging.error(msg)
+        LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
 
@@ -369,7 +431,7 @@ def tratar_texto_tfidf(t, le, x_train, y_train, x_test, y_test, x_val, y_val):
 
     imprimir_shapes("Dimensões dos datasets depois do texto vetorizado", cod_x_train, y_train_one_hot,
                     cod_x_test, y_test_one_hot, cod_x_val, y_val_one_hot)
-    logging.info(f"Exemplo do dataset com o texto processado (10 primeiros registros):\n\n{cod_x_train[:10]}\n")
+    LOGGER.info(f"Exemplo do dataset com o texto processado (10 primeiros registros):\n\n{cod_x_train[:10]}\n")
 
     return qtd_classes_y, cod_x_train, y_train_one_hot, cod_x_test, y_test_one_hot, cod_x_val, y_val_one_hot
 
@@ -403,17 +465,17 @@ def salvar_modelo(t, le, modelo, hist, resultado_teste, tipo_modelo, nome_modelo
         makedirs(caminho_modelo, exist_ok=True)
     except PermissionError:
         msg = f"Erro ao criar a pasta '{caminho_modelo}'. Permissão de escrita negada. Programa abortado!"
-        logging.error(msg)
+        LOGGER.error(msg)
         print(f"\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
 
-    logging.info(f">>> Salvando o modelo '{nome_modelo}' em '{caminho_modelo}'")
+    LOGGER.info(f">>> Salvando o modelo '{nome_modelo}' em '{caminho_modelo}'")
 
     if tipo_modelo == "clf_rn_tfidf":
         modelo.save(caminho_modelo + "modelo_clf_rn_tfidf")
 
         nome_arquitetura = "arquitetura_modelo.txt"
-        logging.info(f">>> Um arquivo txt com a arquitetura do modelo foi salvo na pasta '{caminho_modelo}'")
+        LOGGER.info(f">>> Um arquivo txt com a arquitetura do modelo foi salvo na pasta '{caminho_modelo}'")
 
         # Salva a arquitetura do modelo num arquivo de texto
         with open(caminho_modelo + nome_arquitetura, 'w') as arq:
@@ -440,8 +502,8 @@ def salvar_modelo(t, le, modelo, hist, resultado_teste, tipo_modelo, nome_modelo
         for p in palavras[:t.num_words]:
             arq.write(f"{p[0]};{p[1]};{(p[1] / total_palavras) * 100}\n")
 
-    logging.info(f">>> Foram gerados alguns arquivos txt e CSV com informações sobre o modelo na pasta "
-                 f"'{caminho_modelo}'")
+    LOGGER.info(f">>> Foram gerados alguns arquivos txt e CSV com informações sobre o modelo na pasta "
+                f"'{caminho_modelo}'")
 
     # Salva os parâmetros do treino que serão utilizados no treino automatizado
     salvar_objeto(caminho_modelo, parametros_treino, "TrainingParams")
@@ -505,7 +567,7 @@ def obter_parametros_modelo(cf):
     else:
         msg = f"Os parâmetros 'Tipo modelo' e/ou 'Nome modelo' não foram encontrados no arquivo de configuaração " \
               f"'{cf.caminho_arquivo_conf}'. Programa abortado!"
-        logging.error(msg)
+        LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
 

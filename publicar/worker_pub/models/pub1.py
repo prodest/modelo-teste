@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------------------------------
 # Implementação das funcionalidades para a publicação do modelo via API
 # ----------------------------------------------------------------------------------------------------
-import logging
+from logging import getLogger, FATAL
 import os
 import numpy as np
 from mllibprodest.interfaces import ModelPublicationInterfaceCLF
@@ -11,7 +11,7 @@ from .utils import *
 
 """ Desativa as mensagens de warning e info do TensorFlow """
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-logging.getLogger('tensorflow').setLevel(logging.FATAL)
+getLogger('tensorflow').setLevel(FATAL)
 
 """ Desativa o uso de GPU """
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"

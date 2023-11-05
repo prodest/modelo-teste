@@ -2,9 +2,8 @@
 # Funções para parametrização de modelo baseado em redes neurais
 # ----------------------------------------------------------------------------------------------------------
 import tensorflow as tf
-import logging
 import numpy as np
-from utils import tratar_texto_tfidf
+from utils import LOGGER, tratar_texto_tfidf
 import configs as c
 
 
@@ -71,7 +70,7 @@ def clf_rn_tfidf(t, le, x_train, y_train, x_test, y_test, x_val, y_val):
     msg_log = f"\n\n*************** RESULTADOS DO TREINO ***************\n"
     msg_log += f"\n    Acurácia...: {resultado_teste[1]}\n"
     msg_log += f"\n    Perda......: {resultado_teste[0]}\n\n"
-    logging.info(msg_log)
+    LOGGER.info(msg_log)
     print(msg_log)
 
     return modelo, hist, resultado_teste
@@ -91,7 +90,7 @@ def predizer_tfidf(t, le, modelo, x):
         x = t.texts_to_matrix(x, mode='tfidf')
     except MemoryError as e:
         msg = f"Erro na alocação de memória. Mensagem do Tokenizer: '{e}'. Programa abortado!"
-        logging.error(msg)
+        LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({c.arquivo_log}) para mais detalhes!\n")
         exit(1)
 

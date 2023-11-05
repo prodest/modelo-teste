@@ -7,7 +7,7 @@
 #          testes e validar se o modelo, de fato, tem condições de evoluir para uma nova versão.
 # ----------------------------------------------------------------------------------------------------
 import os
-import logging
+from logging import getLogger, FATAL
 import mlflow
 import numpy as np
 import pandas as pd
@@ -21,7 +21,7 @@ from .utils import concatenar_registros, predizer_tfidf, construir_modelo_rn, ge
 
 """ Desativa as mensagens de warning e info do TensorFlow """
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-logging.getLogger('tensorflow').setLevel(logging.FATAL)
+getLogger('tensorflow').setLevel(FATAL)
 
 """ Desativa o uso de GPU """
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
