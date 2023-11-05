@@ -15,7 +15,7 @@ def construir_modelo_rn(input_shape, output_dim, neuronios=2, aplicar_dropout=Fa
         :param neuronios: Quantidade de neurônios que serão utilizados na rede neural.
         :param aplicar_dropout: Indica se será aplicado Dropout.
         :param perc_dropout: Se for aplicar dropout, qual o percentual.
-        :return: modelo baseado em rede neural instanciado com os parâmetros passados.
+        :return: Modelo baseado em rede neural instanciado com os parâmetros passados.
     """
     modelo = tf.keras.models.Sequential()
     modelo.add(tf.keras.layers.Dense(units=neuronios, input_shape=input_shape, activation='relu'))

@@ -32,7 +32,7 @@ class ModeloRETRAIN(ModelPublicationInterfaceRETRAIN):
         self.__logger_name = model_name + "_retrain.log"
         self.__logger = self.make_log(self.__logger_name)
 
-        # Definição dos atributos necessários para a implementação dos método get
+        # Definição dos atributos necessários para a implementação dos métodos get
         self.__model_name = model_name
         self.__model_provider_name = model_provider_name
         self.__experiment_name = experiment_name

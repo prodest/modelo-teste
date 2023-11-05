@@ -96,7 +96,7 @@ nome_experimento = 'CLF-Cyberbullying_Tweets'
 
 """ Parâmetros para configuração do modelo 'clf_rn_tfidf' """
 
-# Altere para True caso o modelo esteja dando overfitting, ou seja, a acurácia esteja boa no teinamento mas ruim no
+# Altere para True caso o modelo esteja dando overfitting, ou seja, a acurácia esteja boa no treinamento, mas ruim no
 # teste
 aplicar_dropout = False
 

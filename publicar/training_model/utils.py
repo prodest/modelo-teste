@@ -347,14 +347,14 @@ def concatenar_registros(x, algumas_stop_words, remover_stop_words=False, nome_d
     registros_tratados = []
 
     for i in range(len(x)):
-        # Retira espaços em branco no final e no inicio do campo. Também retira acentuação e caracteres especiais
+        # Retira espaços em branco no final e no início do campo. Também retira acentuação e caracteres especiais
         aux = ' '.join([normalize('NFKD', re.sub(r'[^\w\s]', ' ', t.strip())).encode('ASCII', 'ignore').decode('ASCII')
                         for t in list(x[i])])
 
         # Se for o caso, remove as stopwords
         if remover_stop_words:
             # Faz join e depois split novamente porque no join anterior são juntadas palavras e frases,
-            # aqui é pra separar só em palavras
+            # aqui é para separar só em palavras
             split_aux = aux.split()
             aux = [w for w in split_aux if w.lower() not in algumas_stop_words]
             aux = ' '.join(aux)

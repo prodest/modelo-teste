@@ -13,7 +13,7 @@ def treinar(c):
     Rotina de treinamento do modelo.
         :param c: Arquivo de configuração importado.
     """
-    # Gera um id de execução para rastreamanento do modelo gerado no arquivo de log
+    # Gera um id de execução para rastreamento do modelo gerado no arquivo de log
     id_exec = datetime.fromtimestamp(int(time())).strftime('%Y-%m-%d_%H%M%Shs')
     msg = f"# ID da execução: {id_exec}"
     print(f"{msg}\n")
@@ -33,7 +33,7 @@ def treinar(c):
     LOGGER.info("---------------- APLICAÇÃO INICIADA (Treinamento) ----------------")
     LOGGER.info(msg)
 
-    info_modelo = ""  # Guardará algumas informações da rotina de treinamento para salvar junto com o modelo
+    info_modelo = ""  # Guardará algumas informações da rotina de treinamento para salvar com o modelo
     ts_inicio_treinamento = time()
 
     # Monta o caminho completo do arquivo
