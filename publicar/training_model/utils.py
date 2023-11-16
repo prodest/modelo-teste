@@ -268,7 +268,7 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
     msg = f"\n\n  # Quantidade de valores vazios por coluna:\n{dados.isna().sum()}"
 
     if descartar_registros_vazios:
-        # Retira os registros que tem valores vazios
+        # Retira os registros com valores vazios
         dados = dados.dropna()
 
         tamanho_dataset_limpo = len(dados)
