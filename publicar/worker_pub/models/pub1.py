@@ -3,7 +3,6 @@
 # ----------------------------------------------------------------------------------------------------
 from logging import getLogger, FATAL
 import os
-import numpy as np
 from mllibprodest.interfaces import ModelPublicationInterfaceCLF
 from sklearn.metrics import accuracy_score
 from .utils import *

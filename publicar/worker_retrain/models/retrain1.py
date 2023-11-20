@@ -80,7 +80,7 @@ class ModeloRETRAIN(ModelPublicationInterfaceRETRAIN):
         x = pd.read_csv(x, dtype=str, sep=separador, encoding=encoding_arquivo)
         y = pd.read_csv(y, dtype=str, sep=separador, encoding=encoding_arquivo)
 
-        # Garante que as colunas de features e target do dataset sejam as mesmas que foram utilizadas no treino
+        # Garante que as colunas de features e target do dataset sejam as mesmas utilizadas no treino
         try:
             x = x[colunas_selecionadas_x]
             y = y[colunas_selecionadas_y]
@@ -123,7 +123,7 @@ class ModeloRETRAIN(ModelPublicationInterfaceRETRAIN):
         acuracia_percentual = f"{acuracia * 100:.4f}%"
 
         # Apura se existem labels do dataset y que não estavam no dataset utilizado no processo de treinamento.
-        # Caso exista algum, é mandatório que o modelo seja retreinado para ser capaz de predizer tal label.
+        # Caso exista algum, é mandatório que o modelo seja retreinado para conseguir predizer tal label.
         labels_eval = set(y)
         labels_ausentes = [label for label in labels_eval if label not in baseline_metrics['labels_dataset']]
 
@@ -213,7 +213,7 @@ class ModeloRETRAIN(ModelPublicationInterfaceRETRAIN):
         x = x[:qtd_exemplos]
         y = y[:qtd_exemplos]
 
-        # Garante que as colunas de features e target do dataset sejam as mesmas que foram utilizadas no treino
+        # Garante que as colunas de features e target do dataset sejam as mesmas utilizadas no treino
         try:
             x = x[colunas_selecionadas_x]
             y = y[colunas_selecionadas_y]
