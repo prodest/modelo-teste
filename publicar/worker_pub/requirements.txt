@@ -46,7 +46,7 @@ matplotlib==3.8.2
 minio==7.2.1
 ml-dtypes==0.2.0
 mlflow==2.9.2
-mllibprodest==1.8.2
+mllibprodest==1.8.3
 numpy==1.26.2
 oauthlib==3.2.2
 opt-einsum==3.3.0
