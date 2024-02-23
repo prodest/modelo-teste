@@ -47,6 +47,9 @@ class ModeloCLF(ModelPublicationInterfaceCLF):
         else:
             return {'Model name': self.__model_name}
 
+    def get_model_version(self) -> str:
+        return self.__info_modelo['run_id']  # Considerando o 'run_id' como versão do modelo
+
     def predict(self, dataset) -> list | str:
         # Separa os campos por ponto-e-virgula, se for o caso, e transforma num array
         # Obs.: Este array tem que ser nos mesmos moldes de quando é gerado via arquivo (2 dimensões)
