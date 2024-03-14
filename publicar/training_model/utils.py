@@ -7,6 +7,7 @@ import logging
 import re
 import pandas as pd
 import numpy as np
+from tensorflow.saved_model import save
 from unicodedata import normalize
 from keras.utils import to_categorical
 from configs import arquivo_log
@@ -462,15 +463,7 @@ def salvar_modelo(t, le, modelo, hist, resultado_teste, tipo_modelo, nome_modelo
     LOGGER.info(f">>> Salvando o modelo '{nome_modelo}' em '{caminho_modelo}'")
 
     if tipo_modelo == "clf_rn_tfidf":
-        modelo.save(caminho_modelo + "modelo_clf_rn_tfidf")
-
-        nome_arquitetura = "arquitetura_modelo.txt"
-        LOGGER.info(f">>> Um arquivo txt com a arquitetura do modelo foi salvo na pasta '{caminho_modelo}'")
-
-        # Salva a arquitetura do modelo num arquivo de texto
-        with open(caminho_modelo + nome_arquitetura, 'w') as arq:
-            modelo.summary(print_fn=lambda s: arq.write(s + '\n'))
-
+        save(modelo, caminho_modelo)
     else:
         salvar_objeto(caminho_modelo, modelo, nome_modelo + '.pkl')
 

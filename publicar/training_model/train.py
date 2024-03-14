@@ -24,7 +24,7 @@ def treinar(c):
     from utils import LOGGER, salvar_modelo, carregar_dataset, concatenar_registros, imprimir_shapes, \
         imprimir_alguns_parametros_utilizados, imprimir_parametros_treino_rn_tfidf
     from rede_neural_tfidf import clf_rn_tfidf
-    from keras.preprocessing.text import Tokenizer
+    from tensorflow.keras.preprocessing.text import Tokenizer
     from sklearn import preprocessing
     import mlflow.tensorflow
 
@@ -175,7 +175,6 @@ def treinar(c):
     mlflow.log_artifact(caminho_modelo + "algumas_informacoes_modelo.txt")
     mlflow.log_artifact(caminho_modelo + "grafico_treinamento.jpeg")
     mlflow.log_artifact(caminho_modelo + "palavras_utilizadas_contabilizadas.csv")
-    mlflow.log_artifact(caminho_modelo + "arquitetura_modelo.txt")
 
     # Finaliza o experimento no MLFlow
     mlflow.end_run()

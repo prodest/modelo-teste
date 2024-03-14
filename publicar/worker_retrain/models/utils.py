@@ -118,10 +118,11 @@ def construir_modelo_rn(input_shape, output_dim, neuronios=2, aplicar_dropout=Fa
         :return: Modelo baseado em rede neural instanciado com os parâmetros passados.
     """
     modelo = tf.keras.models.Sequential()
-    modelo.add(tf.keras.layers.Dense(units=neuronios, input_shape=input_shape, activation='relu'))
+    modelo.add(tf.keras.layers.Input(shape=input_shape))
+    modelo.add(tf.keras.layers.Dense(units=neuronios, activation='relu'))
 
     if aplicar_dropout:
-        modelo.add(tf.keras.layers.Dropout(perc_dropout, input_shape=input_shape))
+        modelo.add(tf.keras.layers.Dropout(perc_dropout))
 
     modelo.add(tf.keras.layers.Dense(units=output_dim, activation='sigmoid'))
     modelo.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
