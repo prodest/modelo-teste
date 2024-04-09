@@ -52,8 +52,7 @@ def treinar(c):
         x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=c.percentual_exemplos_teste, shuffle=True,
                                                             random_state=c.trava_randomica)
     except ValueError as e:
-        msg = f"O parâmetro 'percentual_exemplos_teste' está inconsistente. Mensagem do 'train_test_split': '{e}'. " \
-              f"Programa abortado!"
+        msg = f"O parâmetro 'percentual_exemplos_teste' está inconsistente. Mensagem do 'train_test_split': '{e}'."
         LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({c.arquivo_log}) para mais detalhes!\n")
         exit(1)

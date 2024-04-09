@@ -57,7 +57,7 @@ class ModeloRETRAIN(ModelPublicationInterfaceRETRAIN):
             x = datasets['features']
             y = datasets['targets']
         except KeyError as e:
-            msg = f"O dataset {e} não foi encontrado no dicionário de datasets. Programa abortado!"
+            msg = f"O dataset {e} não foi encontrado no dicionário de datasets."
             self.__logger.error(msg)
             print(f"\n\n{msg}")
             exit(1)
@@ -71,7 +71,7 @@ class ModeloRETRAIN(ModelPublicationInterfaceRETRAIN):
             colunas_selecionadas_x = training_params['colunas_selecionadas_x']
             colunas_selecionadas_y = training_params['colunas_selecionadas_y']
         except KeyError as e:
-            msg = f"O parâmetro {e} não foi fornecido no dicionário de parâmetros. Programa abortado!"
+            msg = f"O parâmetro {e} não foi fornecido no dicionário de parâmetros."
             self.__logger.error(msg)
             print(f"\n\n{msg}")
             exit(1)
@@ -86,7 +86,7 @@ class ModeloRETRAIN(ModelPublicationInterfaceRETRAIN):
             y = y[colunas_selecionadas_y]
         except KeyError as e:
             msg = f"Coluna(s) em 'colunas_selecionadas_x' ou 'colunas_selecionadas_y' não encontrada(s) no dataset " \
-                  f"(erro Pandas: {e}). Programa abortado!"
+                  f"(erro Pandas: {e})."
             self.__logger.error(msg)
             print(f"\n\n{msg}")
             exit(1)
@@ -200,7 +200,7 @@ class ModeloRETRAIN(ModelPublicationInterfaceRETRAIN):
             colunas_selecionadas_x = production_params['colunas_selecionadas_x']
             colunas_selecionadas_y = production_params['colunas_selecionadas_y']
         except KeyError as e:
-            msg = f"O parâmetro {e} não foi fornecido no dicionário de parâmetros. Programa abortado!"
+            msg = f"O parâmetro {e} não foi fornecido no dicionário de parâmetros."
             self.__logger.error(msg)
             print(f"\n\n{msg}")
             exit(1)
@@ -219,7 +219,7 @@ class ModeloRETRAIN(ModelPublicationInterfaceRETRAIN):
             y = y[colunas_selecionadas_y]
         except KeyError as e:
             msg = f"Coluna(s) em 'colunas_selecionadas_x' ou 'colunas_selecionadas_y' não encontrada(s) no dataset " \
-                  f"(erro Pandas: {e}). Programa abortado!"
+                  f"(erro Pandas: {e})."
             self.__logger.error(msg)
             print(f"\n\n{msg}")
             exit(1)

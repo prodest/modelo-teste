@@ -90,7 +90,7 @@ def predizer_tfidf(t, le, modelo, x):
     try:
         x = t.texts_to_matrix(x, mode='tfidf')
     except MemoryError as e:
-        msg = f"Erro na alocação de memória. Mensagem do Tokenizer: '{e}'. Programa abortado!"
+        msg = f"Erro na alocação de memória. Mensagem do Tokenizer: '{e}'."
         LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({c.arquivo_log}) para mais detalhes!\n")
         exit(1)
