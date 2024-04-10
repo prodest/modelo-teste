@@ -55,12 +55,12 @@ def make_log(filename: str, log_output: str = "file") -> logging.Logger:
             rotatehandler.setFormatter(formatter)
             logger.addHandler(rotatehandler)
         except FileNotFoundError:
-            msg = f"Não foi possível encontrar/criar o arquivo de log no caminho '{log_file_path}'. Programa abortado!"
+            msg = f"Não foi possível encontrar/criar o arquivo de log no caminho '{log_file_path}'."
             print(f"\n{msg}\n")
             exit(1)
         except PermissionError:
             msg = f"Não foi possível criar/acessar o arquivo de log no caminho '{log_file_path}'. Permissão de " \
-                  f"escrita/leitura negada. Programa abortado!"
+                  f"escrita/leitura negada."
             print(f"\n{msg}\n")
             exit(1)
     else:
@@ -197,14 +197,12 @@ def salvar_objeto(caminho, objeto, nome_objeto):
     try:
         arq = open(caminho_arq_objeto, 'wb')
     except FileNotFoundError:
-        msg = f"Erro ao salvar o objeto '{nome_objeto}'. O caminho '{caminho_arq_objeto}' está incorreto. Programa " \
-              f"abortado!"
+        msg = f"Erro ao salvar o objeto '{nome_objeto}'. O caminho '{caminho_arq_objeto}' está incorreto."
         LOGGER.error(msg)
         print(f"\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
     except PermissionError:
-        msg = f"Erro ao salvar o objeto '{nome_objeto}' no caminho '{caminho}'. Permissão de escrita negada. " \
-              f"Programa abortado!"
+        msg = f"Erro ao salvar o objeto '{nome_objeto}' no caminho '{caminho}'. Permissão de escrita negada."
         LOGGER.error(msg)
         print(f"\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
@@ -212,8 +210,7 @@ def salvar_objeto(caminho, objeto, nome_objeto):
     try:
         pickle.dump(objeto, arq)
     except TypeError as e:
-        msg = f"Erro ao persistir o objeto '{nome_objeto}' com o Pickle (mensagem Pickle: {e}). " \
-              f"Programa abortado!"
+        msg = f"Erro ao persistir o objeto '{nome_objeto}' com o Pickle (mensagem Pickle: {e})."
         LOGGER.error(msg)
         print(f"\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
@@ -241,7 +238,7 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
     try:
         dados = pd.read_csv(caminho_arquivo, dtype=str, sep=separador, encoding=encoding_arquivo)
     except FileNotFoundError:
-        msg = f"O arquivo '{caminho_arquivo}' não foi encontrado. Programa abortado!"
+        msg = f"O arquivo '{caminho_arquivo}' não foi encontrado."
         LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
@@ -254,8 +251,7 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
     try:
         dados = dados[colunas_selecionadas_dataset]
     except KeyError as e:
-        msg = f"Coluna em 'colunas_selecionadas_dataset' não encontrada no dataset (erro Pandas: {e}). " \
-              f"Programa abortado!"
+        msg = f"Coluna em 'colunas_selecionadas_dataset' não encontrada no dataset (erro Pandas: {e})."
         LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
@@ -299,7 +295,7 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
     try:
         x = dados[colunas_selecionadas_x]
     except KeyError as e:
-        msg = f"Coluna em 'colunas_selecionadas_x' não encontrada no dataset (erro Pandas: {e}). Programa abortado!"
+        msg = f"Coluna em 'colunas_selecionadas_x' não encontrada no dataset (erro Pandas: {e})."
         LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
@@ -308,8 +304,7 @@ def carregar_dataset(caminho_arquivo, separador, encoding_arquivo, colunas_selec
     try:
         y = dados[colunas_selecionadas_y]
     except KeyError as e:
-        msg = f"Coluna em 'colunas_selecionadas_y' não encontrada no dataset (erro Pandas: {e}). " \
-              f"Programa abortado!"
+        msg = f"Coluna em 'colunas_selecionadas_y' não encontrada no dataset (erro Pandas: {e})."
         LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
@@ -410,7 +405,7 @@ def tratar_texto_tfidf(t, le, x_train, y_train, x_test, y_test, x_val, y_val):
         cod_x_test = t.texts_to_matrix(x_test, mode='tfidf')
         cod_x_val = t.texts_to_matrix(x_val, mode='tfidf')
     except MemoryError as e:
-        msg = f"Erro na alocação de memória. Mensagem do Tokenizer: '{e}'. Programa abortado!"
+        msg = f"Erro na alocação de memória. Mensagem do Tokenizer: '{e}'."
         LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
@@ -455,7 +450,7 @@ def salvar_modelo(t, le, modelo, hist, resultado_teste, tipo_modelo, nome_modelo
     try:
         makedirs(caminho_modelo, exist_ok=True)
     except PermissionError:
-        msg = f"Erro ao criar a pasta '{caminho_modelo}'. Permissão de escrita negada. Programa abortado!"
+        msg = f"Erro ao criar a pasta '{caminho_modelo}'. Permissão de escrita negada."
         LOGGER.error(msg)
         print(f"\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)
@@ -546,7 +541,7 @@ def obter_parametros_modelo(cf):
         nome_modelo = cf.dados_modelo['Nome modelo']
     else:
         msg = f"Os parâmetros 'Tipo modelo' e/ou 'Nome modelo' não foram encontrados no arquivo de configuaração " \
-              f"'{cf.caminho_arquivo_conf}'. Programa abortado!"
+              f"'{cf.caminho_arquivo_conf}'."
         LOGGER.error(msg)
         print(f"\n\n{msg} Consulte o log de execução ({arquivo_log}) para mais detalhes!\n")
         exit(1)

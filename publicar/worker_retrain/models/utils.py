@@ -64,7 +64,7 @@ def tratar_texto_tfidf(t, le, x_train, y_train, x_test, y_test, x_val, y_val, lo
         cod_x_test = t.texts_to_matrix(x_test, mode='tfidf')
         cod_x_val = t.texts_to_matrix(x_val, mode='tfidf')
     except MemoryError as e:
-        msg = f"Erro na alocação de memória. Mensagem do Tokenizer: '{e}'. Programa abortado!"
+        msg = f"Erro na alocação de memória. Mensagem do Tokenizer: '{e}'."
         logger.error(msg)
         print(f"\n\n{msg} Consulte o log de execução para mais detalhes!\n")
         exit(1)
