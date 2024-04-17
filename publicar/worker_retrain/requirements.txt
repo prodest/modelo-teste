@@ -33,7 +33,7 @@ graphql-core==3.2.3
 graphql-relay==3.2.0
 greenlet==3.0.3
 grpcio==1.62.1
-gunicorn==21.2.0
+gunicorn==22.0.0
 h5py==3.10.0
 idna==3.6
 importlib_metadata==7.0.2
