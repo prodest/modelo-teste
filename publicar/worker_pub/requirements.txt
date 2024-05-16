@@ -52,7 +52,7 @@ matplotlib==3.8.3
 mdurl==0.1.2
 minio==7.2.5
 ml-dtypes==0.3.2
-mlflow==2.11.1
+mlflow==2.12.1
 mllibprodest==1.8.5
 namex==0.0.7
 numpy==1.26.4
