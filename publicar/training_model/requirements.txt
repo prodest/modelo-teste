@@ -55,7 +55,7 @@ MarkupSafe==3.0.2
 matplotlib==3.10.1
 mdurl==0.1.2
 ml_dtypes==0.5.1
-mlflow==2.21.3
+mlflow==3.1.0
 mlflow-skinny==2.21.3
 namex==0.0.8
 numpy==2.1.3
