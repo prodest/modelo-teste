@@ -40,7 +40,7 @@ fastmcp==2.13.1
 Flask==3.1.2
 flask-cors==6.0.1
 flatbuffers==25.9.23
-fonttools==4.60.1
+fonttools==4.61.0
 gast==0.6.0
 gitdb==4.0.12
 GitPython==3.1.45
