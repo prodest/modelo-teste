@@ -118,7 +118,7 @@ protobuf==6.33.1
 py-key-value-aio==0.2.8
 py-key-value-shared==0.2.8
 pyarrow==22.0.0
-pyasn1==0.6.1
+pyasn1==0.6.2
 pyasn1_modules==0.4.2
 pycparser==2.23
 pycryptodome==3.23.0
