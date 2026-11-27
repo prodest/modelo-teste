@@ -2,10 +2,24 @@
 # Script para treinamento do modelo
 # ----------------------------------------------------------------------------------------------------------
 import os
+import logging
 import configs as cf
 from datetime import datetime
 from time import time, sleep
 from utils import LOGGER, obter_parametros_modelo
+
+
+class _FiltroAvisoArtifactPath(logging.Filter):
+    """
+    Descarta somente o aviso "`artifact_path` is deprecated" do MLflow. Ele não vem deste código: o
+    mlflow.tensorflow.autolog() chama internamente log_model(model, "model", ...) passando o nome do modelo na posição
+    do parâmetro depreciado. Como não há como alterar essa chamada sem desligar o autolog, o aviso é filtrado.
+    """
+    def filter(self, record):
+        return "`artifact_path` is deprecated" not in record.getMessage()
+
+
+logging.getLogger("mlflow.models.model").addFilter(_FiltroAvisoArtifactPath())
 
 
 def treinar(c):
@@ -117,7 +131,11 @@ def treinar(c):
     mlflow.set_experiment(experiment_name=c.nome_experimento)
     desc = "Experimentos para construção de um modelo para classificar se um tweet é bullying. E se for, qual o tipo."
     run_id = mlflow.start_run(run_name=id_exec, description=desc).info.run_id  # Para usar na verificação de resultados
-    mlflow.tensorflow.autolog()
+    # checkpoint=False: o autolog (padrão checkpoint=True) salva um .h5 a cada época quando há validation_data. O
+    # caminho legado de H5 do Keras remove o 'optimizer' do compile_config do modelo em memória, e o modelo final
+    # era logado sem ele (-> UserWarning "Skipping variable loading for optimizer" ao carregar). Os checkpoints
+    # também não são usados por este fluxo.
+    mlflow.tensorflow.autolog(checkpoint=False)
     tags = {"Projeto": "Classificador de Cyberbullying Tweets", "team": "TESTES"}
     mlflow.set_tags(tags)
 

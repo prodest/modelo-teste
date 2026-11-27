@@ -7,6 +7,7 @@
 #          testes e validar se o modelo, de fato, tem condições de evoluir para uma nova versão.
 # ----------------------------------------------------------------------------------------------------
 import os
+import logging
 from logging import getLogger, FATAL
 import mlflow
 import numpy as np
@@ -18,6 +19,19 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from .utils import concatenar_registros, predizer_tfidf, construir_modelo_rn, gerar_grafico_historico_treino, \
     tratar_texto_tfidf
+
+
+class _FiltroAvisoArtifactPath(logging.Filter):
+    """
+    Descarta somente o aviso "`artifact_path` is deprecated" do MLflow. Ele não vem deste código: o
+    mlflow.tensorflow.autolog() chama internamente log_model(model, "model", ...) passando o nome do modelo na posição
+    do parâmetro depreciado. Como não há como alterar essa chamada sem desligar o autolog, o aviso é filtrado.
+    """
+    def filter(self, record):
+        return "`artifact_path` is deprecated" not in record.getMessage()
+
+
+logging.getLogger("mlflow.models.model").addFilter(_FiltroAvisoArtifactPath())
 
 """ Desativa as mensagens de warning e info do TensorFlow """
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -273,7 +287,11 @@ class ModeloRETRAIN(ModelPublicationInterfaceRETRAIN):
         run_name = "self_training"
         desc = "Experimentos automatizados do modelo para classificar se um tweet é bullying. E se for, qual o tipo."
         run_id = mlflow.start_run(run_name=run_name, description=desc).info.run_id
-        mlflow.tensorflow.autolog()
+        # checkpoint=False: o autolog (padrão checkpoint=True) salva um .h5 a cada época quando há validation_data. O
+        # caminho legado de H5 do Keras remove o 'optimizer' do compile_config do modelo em memória, e o modelo final
+        # era logado sem ele (-> UserWarning "Skipping variable loading for optimizer" ao carregar). Os checkpoints
+        # também não são usados por este fluxo.
+        mlflow.tensorflow.autolog(checkpoint=False)
         tags = {"Projeto": "Classificador de Cyberbullying Tweets", "team": "TESTES"}
         mlflow.set_tags(tags)
 
